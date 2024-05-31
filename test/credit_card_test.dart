@@ -1,3 +1,4 @@
+import 'package:credit_card/utils/card_date.dart';
 import 'package:credit_card/utils/card_flag_detector.dart';
 import 'package:credit_card/utils/card_mask.dart';
 import 'package:credit_card/utils/card_number_validate.dart';
@@ -105,6 +106,24 @@ void main() {
     test('Mascarar número de cartão com caracteres especiais', () {
       expect(
           maskCardNumber("4539-1488-0343-6467"), equals("•••• •••• •••• 6467"));
+    });
+  });
+
+  group('Testes para Validar Mês e Ano:', () {
+    test('Validar mês e ano válidos', () {
+      expect(isValidDate('2023-02'), equals(true));
+    });
+
+    test('Validar mês inválido', () {
+      expect(isValidDate('2023-13'), equals(false));
+    });
+
+    test('Validar formato inválido', () {
+      expect(isValidDate('2023/02'), equals(false));
+    });
+
+    test('Validar ano com dois dígitos', () {
+      expect(isValidDate('23-02'), equals(false));
     });
   });
 }
