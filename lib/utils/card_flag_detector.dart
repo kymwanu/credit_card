@@ -23,3 +23,30 @@ CardType detectCardType(String cardNumber) {
     return CardType.Other;
   }
 }
+
+bool validarCCV(String ccv, CardType cardType) {
+  if (ccv.isEmpty) {
+    return false;
+  }
+
+  // Remover espaços em branco e caracteres não numéricos
+  ccv = ccv.replaceAll(RegExp(r'\D+'), '');
+
+  // Determinar o comprimento do CCV com base no tipo de cartão
+  int ccvLength;
+  switch (cardType) {
+    case CardType.Visa:
+    case CardType.MasterCard:
+    case CardType.Discover:
+      ccvLength = 3;
+      break;
+    case CardType.AmericanExpress:
+      ccvLength = 4;
+      break;
+    default:
+      return false; // Tipo de cartão desconhecido
+  }
+
+  // Verificar se o CCV tem o comprimento correto
+  return ccv.length == ccvLength;
+}

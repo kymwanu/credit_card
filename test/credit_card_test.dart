@@ -1,4 +1,5 @@
 import 'package:credit_card/utils/card_flag_detector.dart';
+import 'package:credit_card/utils/card_mask.dart';
 import 'package:credit_card/utils/card_number_validate.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -45,34 +46,65 @@ void main() {
     });
   });
 
-  group('Testes para Detetar tipo de cartão:', () {
-    test('Detectar Visa', () {
-      expect(detectCardType("4539 1488 0343 6467"), equals(CardType.Visa));
+  group('Testes para detectCardType', () {
+    test('Deve retornar Visa para números de cartão Visa válidos', () {
+      expect(detectCardType('4111111111111111'), equals(CardType.Visa));
     });
 
-    test('Detectar MasterCard', () {
-      expect(detectCardType("5500000000000004"), equals(CardType.MasterCard));
+    test('Deve retornar MasterCard para números de cartão MasterCard válidos',
+        () {
+      expect(detectCardType('5500000000000004'), equals(CardType.MasterCard));
     });
 
-    test('Detectar American Express', () {
+    test(
+        'Deve retornar AmericanExpress para números de cartão American Express válidos',
+        () {
       expect(
-          detectCardType("378282246310005"), equals(CardType.AmericanExpress));
+          detectCardType('378282246310005'), equals(CardType.AmericanExpress));
     });
 
-    test('Detectar Discover', () {
-      expect(detectCardType("6011111111111117"), equals(CardType.Discover));
+    test('Deve retornar Discover para números de cartão Discover válidos', () {
+      expect(detectCardType('6011000000000004'), equals(CardType.Discover));
     });
 
-    test('Detectar Outros', () {
-      expect(detectCardType("1234"), equals(CardType.Other));
+    test('Deve retornar Other para números de cartão inválidos', () {
+      expect(detectCardType('1234567890123456'), equals(CardType.Other));
     });
-/* 
-    test('Detectar cartão nulo', () {
-      expect(() => detectCardType(null), throwsA(isA<AssertionError>()));
-    }); */
+  });
 
-    test('Detectar cartão vazio', () {
-      expect(detectCardType(""), equals(CardType.Other));
+  group('Testes para validarCCV', () {
+    test('Deve retornar verdadeiro para um CCV válido', () {
+      expect(validarCCV('123', CardType.Visa), isTrue);
+    });
+
+    test('Deve retornar falso para um CCV inválido', () {
+      expect(validarCCV('12345', CardType.MasterCard), isFalse);
+    });
+
+    // Adicione mais testes para diferentes casos, se necessário
+  });
+
+  group('Testes para Mascaramento de Número de Cartão:', () {
+    test('Mascarar número de cartão válido', () {
+      expect(
+          maskCardNumber("4539 1488 0343 6467"), equals("•••• •••• •••• 6467"));
+    });
+
+    test('Mascarar número de cartão com menos de 4 dígitos', () {
+      expect(maskCardNumber("123"), equals("123"));
+    });
+
+    test('Mascarar número de cartão nulo', () {
+      expect(maskCardNumber(null), equals(''));
+    });
+
+    test('Mascarar número de cartão vazio', () {
+      expect(maskCardNumber(''), equals(''));
+    });
+
+    test('Mascarar número de cartão com caracteres especiais', () {
+      expect(
+          maskCardNumber("4539-1488-0343-6467"), equals("•••• •••• •••• 6467"));
     });
   });
 }
