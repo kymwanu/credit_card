@@ -5,7 +5,7 @@ import 'package:credit_card/utils/card_number_validate.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group('Testes para Validar cartão:', () {
+  group('Testes para validar cartão:', () {
     test('Valid Luhn number', () {
       // Número de cartão de crédito válido
       String validCardNumber = "4539 1488 0343 6467";
@@ -40,10 +40,6 @@ void main() {
       // Teste com espaços extras no número do cartão
       String spacedCardNumber = " 4539 1488 0343 6467 ";
       expect(isValidLuhn(spacedCardNumber), true);
-    });
-
-    test('Teste para função 2', () {
-      // Teste para a função 2
     });
   });
 
@@ -81,8 +77,6 @@ void main() {
     test('Deve retornar falso para um CCV inválido', () {
       expect(validarCCV('12345', CardType.MasterCard), isFalse);
     });
-
-    // Adicione mais testes para diferentes casos, se necessário
   });
 
   group('Testes para Mascaramento de Número de Cartão:', () {
